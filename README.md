@@ -7,7 +7,7 @@ A collection of security and reverse engineering tools.
 ### Static Malware Analyzer
 A production-grade static analysis tool for Windows PE (Portable Executable) malware.
 
-**Location:** `tools/`
+**Location:** `tool/staticAnalyser/`
 
 **Features:**
 - PE/DOS header parsing
@@ -20,7 +20,7 @@ A production-grade static analysis tool for Windows PE (Portable Executable) mal
 
 **Quick Start:**
 ```bash
-cd tools
+cd tool/staticAnalyser
 pip install -r requirements.txt
 pip install -e .
 
@@ -28,4 +28,4 @@ pip install -e .
 byteXplorerStatic malware.exe --output ./reports --format all
 ```
 
-See `tools/README.md` for full documentation.
+See `tool/staticAnalyser/README.md` for full documentation.

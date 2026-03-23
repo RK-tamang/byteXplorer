@@ -18,7 +18,7 @@ A production-grade static analysis tool for Windows PE (Portable Executable) mal
 
 ### Linux/macOS
 ```bash
-cd tools
+cd tool/staticAnalyser
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -39,7 +39,7 @@ sudo pacman -S file
 
 ### Windows
 ```cmd
-cd tools
+cd tool\staticAnalyser
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
@@ -97,7 +97,7 @@ Reports are named after the malware file: `malware.exe.json`, `malware.exe.pdf`,
 ## Project Structure
 
 ```
-tools/
+tool/staticAnalyser/
 ├── src/
 │   ├── main.py              # CLI entry point
 │   ├── analyzers/           # Analysis modules
@@ -105,9 +105,9 @@ tools/
 │   │   ├── pe_analyzer.py
 │   │   ├── hash_analyzer.py
 │   │   └── string_analyzer.py
-│   ├── models/              # Data models
+│   ├── models/             # Data models
 │   │   └── analysis.py
-│   ├── reporters/           # Report generators
+│   ├── reporters/          # Report generators
 │   │   ├── json_reporter.py
 │   │   ├── markdown_reporter.py
 │   │   ├── docx_reporter.py
