@@ -1,4 +1,33 @@
-import magic
+try:
+    import magic
+except ImportError:
+    try:
+        import magic as _magic
+        import sys
+        if sys.platform == "win32":
+            import ctypes
+            from ctypes import windll, wintypes
+            def magic_from_file(filename, mime=False):
+                try:
+                    libmagic = windll.LoadLibrary("libmagic-1.dll")
+                    if mime:
+                        buffer = ctypes.create_string_buffer(4096)
+                        libmagic.magic_file(buffer, filename.encode('utf-8'), 16)
+                    else:
+                        buffer = ctypes.create_string_buffer(4096)
+                        libmagic.magic_file(buffer, filename.encode('utf-8'), 0)
+                    return buffer.value.decode('utf-8', errors='replace')
+                except:
+                    return "application/octet-stream"
+            class Magic:
+                def from_file(self, path, mime=False):
+                    return magic_from_file(path, mime)
+            magic = Magic()
+        else:
+            raise
+    except ImportError:
+        raise ImportError("python-magic or python-magic-bin is required. Install with: pip install python-magic (Linux) or pip install python-magic-bin (Windows)")
+
 from pathlib import Path
 from typing import Dict, Any
 from models.analysis import AnalysisResult, FileInfo, Hashes, Severity, Assessment, PackerStatus

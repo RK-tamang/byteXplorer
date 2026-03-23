@@ -18,14 +18,4 @@ A production-grade static analysis tool for Windows PE (Portable Executable) mal
 - Risk scoring and severity assessment
 - Multi-format reports (JSON, Markdown, DOCX, PDF)
 
-**Quick Start:**
-```bash
-cd tool/staticAnalyser
-pip install -r requirements.txt
-pip install -e .
-
-# Analyze malware
-byteXplorerStatic malware.exe --output ./reports --format all
-```
-
 See `tool/staticAnalyser/README.md` for full documentation.

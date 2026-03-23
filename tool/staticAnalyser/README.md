@@ -1,130 +1,149 @@
 # Static Malware Analyzer
 
-A production-grade static analysis tool for Windows PE (Portable Executable) malware. Analyzes executables without running them.
+A production-grade static analysis tool for Windows PE (Portable Executable) malware.
 
-## Features
+---
 
-- **PE/DOS Header Parsing** - Extracts machine type, entry point, image base, sections, imports, exports
-- **Hash Computation** - MD5, SHA1, SHA256, imphash
-- **Section Analysis** - Entropy calculation, RWX detection, suspicious section identification
-- **Import/Export Analysis** - DLL imports, suspicious API detection (40+ APIs across 10+ DLLs)
-- **String Extraction** - ASCII/Unicode strings with IOC extraction
-- **IOC Detection** - URLs, IPs, domains, emails, registry keys, file paths
-- **Risk Assessment** - Scoring algorithm (0-100) with Low/Medium/High severity
-- **Packer Detection** - Heuristics based on entropy and section characteristics
-- **Multi-format Reports** - JSON, Markdown, DOCX, PDF with executive summary
+## Windows Installation
 
-## Installation
+### Step 1: Open Command Prompt
 
-### Linux/macOS
-```bash
-cd tool/staticAnalyser
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-pip install -e .
-```
+Press `Win + R`, type `cmd`, press Enter.
 
-**Note:** On Linux, you need `libmagic1` for python-magic:
-```bash
-# Debian/Ubuntu
-sudo apt-get install libmagic1
+### Step 2: Navigate to Tool Directory
 
-# Fedora/RHEL
-sudo dnf install file-devel
-
-# Arch
-sudo pacman -S file
-```
-
-### Windows
 ```cmd
-cd tool\staticAnalyser
+cd path\to\byteXplorer\tool\staticAnalyser
+```
+
+### Step 3: Create Virtual Environment
+
+```cmd
 python -m venv venv
+```
+
+### Step 4: Activate Virtual Environment
+
+```cmd
 venv\Scripts\activate
-pip install -r requirements.txt
+```
+
+### Step 5: Install Dependencies (Windows)
+
+```cmd
+pip install -r requirements-win.txt
+```
+
+### Step 6: Install Package
+
+```cmd
 pip install -e .
 ```
+
+### Uninstall
+
+```cmd
+pip uninstall bytexplorer-static
+```
+
+---
+
+## Linux/macOS Installation
+
+### Step 1: Navigate to Tool Directory
+
+```bash
+cd path/to/byteXplorer/tool/staticAnalyser
+```
+
+### Step 2: Create Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+### Step 3: Activate Virtual Environment
+
+```bash
+source venv/bin/activate
+```
+
+### Step 4: Install Dependencies
+
+```bash
+pip install -r requirements-linux.txt
+```
+
+### Step 5: Install Package
+
+```bash
+pip install -e .
+```
+
+---
 
 ## Usage
 
-```bash
-# Basic analysis (generates all report formats)
-byteXplorerStatic malware.exe --output ./reports
+After installation, use `byteXplorerStatic` from **any directory**:
+
+```cmd
+# Basic analysis
+byteXplorerStatic C:\malware\sample.exe
+
+# With output directory
+byteXplorerStatic C:\malware\sample.exe --output C:\reports
 
 # Specific format
-byteXplorerStatic malware.exe --output /path/to/reports --format json
+byteXplorerStatic sample.exe --output C:\reports --format json
 
-# Multiple formats
-byteXplorerStatic malware.exe -o ./reports -f pdf
-
-# Verbose mode
-byteXplorerStatic malware.exe -o ./reports --format all -v
+# All formats + verbose
+byteXplorerStatic sample.exe -o C:\reports --format all -v
 ```
 
 ### Options
-- `file_path` - Path to the PE file to analyze (required)
-- `-o, --output` - Output directory (default: ./reports)
-- `-f, --format` - Report format: json, md, docx, pdf, or all (default: all)
-- `-v, --verbose` - Enable verbose logging
 
-## Report Formats
-
-| Format | Description |
+| Option | Description |
 |--------|-------------|
-| JSON | Machine-readable full analysis data |
-| Markdown | Human-readable report with tables |
-| DOCX | Word document report |
-| PDF | PDF report with styled tables |
+| `file_path` | Path to PE file (required) |
+| `-o, --output` | Output directory (default: ./reports) |
+| `-f, --format` | Format: json, md, docx, pdf, all (default: all) |
+| `-v, --verbose` | Show detailed logs |
 
-Reports are named after the malware file: `malware.exe.json`, `malware.exe.pdf`, etc.
+---
+
+## Report Output
+
+Reports are saved in the output directory:
+
+```
+C:\reports\
+├── sample.exe.json
+├── sample.exe.md
+├── sample.exe.docx
+└── sample.exe.pdf
+```
+
+---
+
+## Quick Reference
+
+| Task | Command |
+|------|---------|
+| Analyze file | `byteXplorerStatic sample.exe` |
+| JSON only | `byteXplorerStatic sample.exe -f json` |
+| PDF only | `byteXplorerStatic sample.exe -f pdf` |
+| Custom output | `byteXplorerStatic sample.exe -o C:\myreports` |
+| Verbose mode | `byteXplorerStatic sample.exe -v` |
+
+---
 
 ## Risk Scoring
 
-| Indicator | Points |
-|-----------|--------|
-| High entropy section (>7.0) | +10 per section |
-| RWX (executable+writable) section | +30 |
-| Suspicious API imports | +3 per API (max 25) |
-| Suspicious strings (cmd, powershell) | +5 per string (max 15) |
-| System32 path references | +3 per reference (max 10) |
+| Indicator | Score |
+|-----------|-------|
+| High entropy section (>7.0) | +10 each |
+| RWX section | +30 |
+| Suspicious APIs | +3 each |
+| Suspicious strings | +5 each |
 
-**Severity:**
-- Low: 0-30
-- Medium: 31-70
-- High: 71-100
-
-## Project Structure
-
-```
-tool/staticAnalyser/
-├── src/
-│   ├── main.py              # CLI entry point
-│   ├── analyzers/           # Analysis modules
-│   │   ├── file_analyzer.py
-│   │   ├── pe_analyzer.py
-│   │   ├── hash_analyzer.py
-│   │   └── string_analyzer.py
-│   ├── models/             # Data models
-│   │   └── analysis.py
-│   ├── reporters/          # Report generators
-│   │   ├── json_reporter.py
-│   │   ├── markdown_reporter.py
-│   │   ├── docx_reporter.py
-│   │   └── pdf_reporter.py
-│   └── utils/              # Utilities
-│       ├── entropy.py
-│       └── logger.py
-├── setup.py                # Package setup
-├── requirements.txt        # Dependencies
-└── README.md
-```
-
-## Requirements
-
-- Python 3.8+
-- pefile
-- python-magic (Linux) / python-magic-bin (Windows)
-- python-docx
-- reportlab
-- colorlog
+**Severity:** Low (0-30) | Medium (31-70) | High (71-100)

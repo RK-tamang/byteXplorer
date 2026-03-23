@@ -1,8 +1,6 @@
 from setuptools import setup, find_packages
 import os
-
-def get_version():
-    return "1.0.0"
+import sys
 
 setup(
     name="bytexplorer-static",
@@ -15,16 +13,16 @@ setup(
     url="https://github.com/bytexplorer/static-malware-analyzer",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
+    py_modules=[],
     install_requires=[
         "pefile>=2023.2.7",
-        "python-magic>=0.4.27",
         "python-docx>=1.1.2",
         "reportlab>=4.2.2",
         "colorlog>=6.8.2",
     ],
     entry_points={
         "console_scripts": [
-            "byteXplorerStatic = main:main",
+            "byteXplorerStatic = src.main:main",
         ],
     },
     python_requires=">=3.8",
