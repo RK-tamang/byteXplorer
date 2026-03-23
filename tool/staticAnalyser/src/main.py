@@ -4,7 +4,11 @@ import logging
 import sys
 import os
 from pathlib import Path
-from typing import Dict, Any
+
+_SCRIPT_DIR = Path(__file__).resolve().parent
+if str(_SCRIPT_DIR.parent) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR.parent))
+
 from analyzers.file_analyzer import FileAnalyzer
 from reporters.report_generator import ReportGenerator
 from utils.logger import setup_logger
@@ -18,10 +22,8 @@ def main():
     
     args = parser.parse_args()
     
-    # Setup logger
     logger = setup_logger(verbose=args.verbose)
     
-    # Validate input
     file_path = Path(args.file_path)
     if not file_path.is_file():
         logger.error(f"File not found: {file_path}")
@@ -49,4 +51,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
