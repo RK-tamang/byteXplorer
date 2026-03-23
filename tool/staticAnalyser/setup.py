@@ -22,7 +22,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "byteXplorerStatic = src.main:main",
+            "byteXplorerStatic = main:main",
         ],
     },
     python_requires=">=3.8",
